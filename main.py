@@ -15,16 +15,18 @@ load_dotenv()
 
 st.set_page_config(
     page_title="AI CV Analyst",
-    page_icon="📃",
+    page_icon="🤖",
     layout="centered",
 )
 
-st.title("📄 AI CV Analyst")
-# delay the toast for 2 seconds
-st.toast("Welcome to the AI CV Analyst!", icon="📄")
+st.title("🤖 AI CV Analyst")
+
+
 st.markdown(
     "Upload your resume and get AI-powered feedback tailored to your needs!",
 )
+
+st.toast("Welcome to the AI CV Analyst!", icon="🤖")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -42,7 +44,7 @@ def extract_text_from_file(file):
     return file.read().decode("utf-8")
 
 
-def analyze_resume(content: str, role: str, client: OpenAI):
+def analyze_resume(content: str, role: str, desc: str, client: OpenAI):
     prompt = f"""Please analyze this resume and provide constructive feedback. 
     Focus on the following aspects:
     1. Content clarity and impact
@@ -52,6 +54,9 @@ def analyze_resume(content: str, role: str, client: OpenAI):
 
     Resume content:
     {content}
+
+    Please also consider the job description provided below to tailor your feedback:
+    {desc}
 
     Please provide your analysis in a clear, structured format with specific recommendations.
     And finally, please provide a score out of 10 for the resume."""
@@ -77,7 +82,7 @@ def rewrite_resume(content: str, analysis: str, role: str, client: OpenAI):
     {content}
 
     Return the updated CV in this raw JSON format {cv_data} using the same structure as the original.
-    Do NOT include any markdown formatting, explanation, or code fences like ```json.
+    Do NOT include any markdown formatting, explanation, or code fences like ``` json.
     Only return the raw JSON.
     """
 
@@ -95,9 +100,10 @@ def rewrite_resume(content: str, analysis: str, role: str, client: OpenAI):
 
 uploaded_file = st.file_uploader("Upload your resume (PDF or TXT)", type=["pdf", "txt"])
 job_role = st.text_input("Enter the job role you're targeting (optional)")
+job_desc = st.text_area("Enter the job description here (optional)")
 analyze = st.button("Analyze Resume")
 
-if analyze or uploaded_file:
+if analyze and uploaded_file:
     try:
         text = extract_text_from_file(uploaded_file)
         if not text.strip():
@@ -107,7 +113,7 @@ if analyze or uploaded_file:
         client = OpenAI(api_key=OPENAI_API_KEY)
 
         with st.spinner("Analyzing your resume..."):
-            analysis = analyze_resume(text, job_role, client)
+            analysis = analyze_resume(text, job_role, job_desc, client)
 
         st.markdown("Resume Analysis")
         st.markdown(analysis)
@@ -151,19 +157,18 @@ if analyze or uploaded_file:
 
         # Download button
         st.download_button(
-            label="📥 Download Rewritten Resume as PDF",
+            label="Download Rewritten CV as PDF",
             data=pdf_buffer,
             file_name="rewritten_resume.pdf",
             mime="application/pdf",
         )
-        st.stop()
+        # st.stop()
 
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
 
 current_year = datetime.datetime.now().year
-st.markdown("AI-powered feedback tailored to your needs!")
 st.markdown(
-    f"""<center>© {current_year}  AI CV Analyst by Lorenzo</center>""",
+    f"""\n© {current_year}  AI CV Analyst by Lorenzo""",
     unsafe_allow_html=True,
 )
