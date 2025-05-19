@@ -11,19 +11,20 @@ from reportlab.platypus import (
 )
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
+
+# from reportlab.pdfbase import pdfmetrics
+# from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 
 
 # Register Cambria or fallback to Times New Roman
-try:
-    pdfmetrics.registerFont(TTFont("Cambria", "Cambria.ttf"))
-    base_font = "Cambria"
-except Exception:
-    pdfmetrics.registerFont(TTFont("TimesNewRoman", "times.ttf"))
-    base_font = "TimesNewRoman"
+# try:
+#     pdfmetrics.registerFont(TTFont("Cambria", "Cambria.ttf"))
+#     base_font = "Cambria"
+# except Exception:
+#     pdfmetrics.registerFont(TTFont("TimesNewRoman", "times.ttf"))
+#     base_font = "TimesNewRoman"
 
 # Load JSON Data (simulating your provided data structure)
 cv_data = {
@@ -91,7 +92,7 @@ def generate_cv(data):
     styles.add(
         ParagraphStyle(
             name="TitleCustom",
-            fontName=base_font,
+            # fontName=base_font,
             fontSize=20,
             spaceAfter=6,
             leading=24,
@@ -100,7 +101,7 @@ def generate_cv(data):
     styles.add(
         ParagraphStyle(
             name="SubTitle",
-            fontName=base_font,
+            # fontName=base_font,
             fontSize=10,
             alignment=2,
         )
@@ -108,7 +109,7 @@ def generate_cv(data):
     styles.add(
         ParagraphStyle(
             name="Heading1Custom",
-            fontName=base_font,
+            # fontName=base_font,
             fontSize=14,
             textColor=colors.HexColor("#003366"),
             spaceAfter=10,
@@ -118,7 +119,7 @@ def generate_cv(data):
     styles.add(
         ParagraphStyle(
             name="Heading2Custom",
-            fontName=base_font,
+            # fontName=base_font,
             fontSize=11,
             spaceAfter=4,
             leading=14,
@@ -127,7 +128,7 @@ def generate_cv(data):
     styles.add(
         ParagraphStyle(
             name="NormalCustom",
-            fontName=base_font,
+            # fontName=base_font,
             fontSize=9,
             leading=13,
         )
@@ -135,7 +136,7 @@ def generate_cv(data):
     styles.add(
         ParagraphStyle(
             name="BulletCustom",
-            fontName=base_font,
+            # fontName=base_font,
             fontSize=8,
             leftIndent=12,
             bulletIndent=12,
